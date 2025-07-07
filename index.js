@@ -1,7 +1,8 @@
-const WebSocket = require("ws");
-const http = require("http");
+import { WebSocketServer } from 'ws';
+import http from 'http';
+
 const server = http.createServer();
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocketServer({ server });
 
 let messages = [];
 
@@ -13,7 +14,7 @@ wss.on("connection", (ws) => {
     messages.push(messageData);
 
     wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
+      if (client.readyState === ws.OPEN) {
         client.send(JSON.stringify({ type: "new", data: messageData }));
       }
     });
@@ -23,3 +24,4 @@ wss.on("connection", (ws) => {
 server.listen(8080, () => {
   console.log("WebSocket server running on ws://localhost:8080");
 });
+
